@@ -1,28 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kppmining_calculator/controller/calculator/calculator_controller.dart';
 
 class CalculatorPage extends StatelessWidget {
   const CalculatorPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(CalculatorController());
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text("Calculator")),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildDropdown(title: 'Pattern', hint: 'Select Pattern'),
-              _buildDropdown(title: 'PF', hint: 'Select PF'),
-              _buildTextField(
-                title: 'DEPTH (m)',
-                hint: 'Input Depth',
-              ),
-            ],
-          )),
+        padding: const EdgeInsets.all(16.0),
+        child: GetBuilder<CalculatorController>(
+          init: CalculatorController(),
+          builder: (_) {
+            return Column(
+              children: [
+                _buildDropdown(title: 'Pattern', hint: 'Select Pattern'),
+                _buildDropdown(title: 'PF', hint: 'Select PF'),
+                _buildTextField(
+                  title: 'DEPTH (m)',
+                  hint: 'Input Depth',
+                  controller: controller.inputDepth,
+                ),
+                IgnorePointer(
+                  child: _buildTextField(
+                    title: 'PF Hasil',
+                    hint: 'Result PF',
+                    controller: controller.resultPf,
+                  ),
+                ),
+                IgnorePointer(
+                  child: _buildTextField(
+                    title: 'T Hasil',
+                    hint: 'Result T',
+                    controller: controller.resultT,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
-  _buildDropdown({String? title, String? hint}) {
+  Widget _buildDropdown({String? title, String? hint}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -32,9 +57,7 @@ class CalculatorPage extends StatelessWidget {
             title ?? '',
             style: const TextStyle(color: Colors.grey),
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           SizedBox(
             width: double.infinity,
             child: DecoratedBox(
@@ -57,13 +80,17 @@ class CalculatorPage extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  _buildTextField({String? title, String? hint}) {
+  Widget _buildTextField({
+    String? title,
+    String? hint,
+    required TextEditingController controller,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -73,10 +100,10 @@ class CalculatorPage extends StatelessWidget {
             title ?? '',
             style: const TextStyle(color: Colors.grey),
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           TextField(
+            controller: controller,
+            keyboardType: const TextInputType.numberWithOptions(),
             decoration: InputDecoration(
               hintText: hint,
               hintStyle: const TextStyle(color: Colors.grey),
@@ -85,10 +112,8 @@ class CalculatorPage extends StatelessWidget {
                 borderSide: BorderSide(color: Colors.grey.withOpacity(.2)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(12.0), // border radius saat fokus
-                borderSide: const BorderSide(
-                    color: Colors.grey), // tetap abu-abu saat fokus
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: const BorderSide(color: Colors.grey),
               ),
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
