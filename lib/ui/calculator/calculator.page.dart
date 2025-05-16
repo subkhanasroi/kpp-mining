@@ -16,7 +16,7 @@ class CalculatorPage extends StatelessWidget {
         child: GetBuilder<CalculatorController>(
           init: CalculatorController(),
           builder: (_) {
-            return Column(
+            return ListView(
               children: [
                 Obx(() {
                   return _buildDropdown(
@@ -26,7 +26,15 @@ class CalculatorPage extends StatelessWidget {
                       selected: controller.selectedPattern,
                       onChanged: controller.setPattern);
                 }),
-                // _buildDropdown(title: 'PF', hint: 'Select PF'),
+                Obx(() {
+                  return _buildDropdown(
+                    title: 'PF',
+                    hint: 'Select PF',
+                    items: controller.listPF,
+                    selected: controller.selectedPF,
+                    onChanged: controller.setPF,
+                  );
+                }),
                 _buildTextField(
                   title: 'DEPTH (m)',
                   hint: 'Input Depth',
@@ -44,6 +52,27 @@ class CalculatorPage extends StatelessWidget {
                     title: 'T Hasil',
                     hint: 'Result T',
                     controller: controller.resultT,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: controller.hitungHasil,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Hasil',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -109,6 +138,7 @@ class CalculatorPage extends StatelessWidget {
     String? title,
     String? hint,
     required TextEditingController controller,
+    FocusNode? focus,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -122,6 +152,7 @@ class CalculatorPage extends StatelessWidget {
           const SizedBox(height: 8),
           TextField(
             controller: controller,
+            focusNode: focus,
             keyboardType: const TextInputType.numberWithOptions(),
             decoration: InputDecoration(
               hintText: hint,

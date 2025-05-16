@@ -6,9 +6,10 @@ class CalculatorController extends GetxController {
   late TextEditingController resultPf;
   late TextEditingController resultT;
   late RxList<String> listPattern;
-  late RxList listPF;
+  late RxList<String> listPF;
   var selectedPattern = RxnString();
   var selectedPF = RxnString();
+  final FocusNode focusNode = FocusNode();
 
   @override
   void onInit() {
@@ -17,9 +18,14 @@ class CalculatorController extends GetxController {
     resultPf = TextEditingController(text: 0.toString());
     resultT = TextEditingController(text: 0.toString());
     listPattern = RxList<String>(['8x7', '8x8', '8x9']);
-    listPF = RxList([]);
-
+    listPF = RxList<String>([]);
     generatePfList();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    focusNode.requestFocus();
   }
 
   void setPattern(String? value) {
@@ -35,5 +41,23 @@ class CalculatorController extends GetxController {
       12,
       (index) => (0.15 + index * 0.01).toStringAsFixed(2),
     );
+  }
+
+  void hitungHasil() {
+    if (selectedPattern.value == null || selectedPF.value == null) return;
+
+    List<String> patternSplit = selectedPattern.value!.split('x');
+    double patternWidth = double.tryParse(patternSplit[0]) ?? 0;
+    double patternHeight = double.tryParse(patternSplit[1]) ?? 0;
+
+    double depth = double.tryParse(inputDepth.text) ?? 0;
+    double pf = double.tryParse(selectedPF.value!) ?? 0;
+
+    double pfHasil = patternWidth * patternHeight * depth * pf;
+
+    double tHasil = depth - (pfHasil / 25);
+
+    resultPf.text = pfHasil.toStringAsFixed(3);
+    resultT.text = tHasil.toStringAsFixed(3);
   }
 }
