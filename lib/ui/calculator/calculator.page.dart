@@ -18,8 +18,15 @@ class CalculatorPage extends StatelessWidget {
           builder: (_) {
             return Column(
               children: [
-                _buildDropdown(title: 'Pattern', hint: 'Select Pattern'),
-                _buildDropdown(title: 'PF', hint: 'Select PF'),
+                Obx(() {
+                  return _buildDropdown(
+                      title: 'Pattern',
+                      hint: 'Select Pattern',
+                      items: controller.listPattern,
+                      selected: controller.selectedPattern,
+                      onChanged: controller.setPattern);
+                }),
+                // _buildDropdown(title: 'PF', hint: 'Select PF'),
                 _buildTextField(
                   title: 'DEPTH (m)',
                   hint: 'Input Depth',
@@ -47,7 +54,13 @@ class CalculatorPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdown({String? title, String? hint}) {
+  Widget _buildDropdown({
+    String? title,
+    String? hint,
+    required RxList<String> items,
+    required RxnString selected,
+    required Function(String?) onChanged,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -75,8 +88,14 @@ class CalculatorPage extends StatelessWidget {
                     hint ?? '',
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  items: const [],
-                  onChanged: (value) {},
+                  value: selected.value,
+                  items: items
+                      .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item),
+                          ))
+                      .toList(),
+                  onChanged: onChanged,
                 ),
               ),
             ),
