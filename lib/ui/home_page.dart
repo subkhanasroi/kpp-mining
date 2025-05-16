@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
 import 'package:kppmining_calculator/ui/calculator/calculator.page.dart';
+import 'package:kppmining_calculator/ui/checklist/checklist.page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,15 +27,18 @@ class HomePage extends StatelessWidget {
                 icon: 'assets/svg/calculator.svg',
                 title: 'Calculator PF &T',
                 onTap: () {
-                  debugPrint('klik');
                   Get.to(const CalculatorPage());
                 },
               ),
               _buttonHome(
-                  icon: 'assets/svg/check-square.svg',
-                  title: 'Checklist',
-                  color: Colors.white,
-                  textColor: Colors.green),
+                icon: 'assets/svg/check-square.svg',
+                title: 'Checklist',
+                color: Colors.white,
+                textColor: Colors.green,
+                onTap: () {
+                  Get.to(const ChecklistPage());
+                },
+              ),
             ],
           ),
         ),

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       defaultTransition: Transition.circularReveal,
       debugShowCheckedModeBanner: false,
-      title: 'Kpp Mining',
+      title: 'LedakIn',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
