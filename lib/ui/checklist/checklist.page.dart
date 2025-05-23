@@ -76,7 +76,7 @@ class ChecklistPage extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: controller.editTanggal,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               shape: RoundedRectangleBorder(

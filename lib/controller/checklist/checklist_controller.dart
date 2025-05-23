@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:kppmining_calculator/component/change_date_dialog.component.dart';
 
 class ChecklistController extends GetxController {
   final RxList dataList = <RxMap<String, String>>[
@@ -20,5 +21,7 @@ class ChecklistController extends GetxController {
     }
   }
 
-  void editTanggal() {}
+  void editTanggal() {
+    Get.dialog(const ChangeDateDialogWidget());
+  }
 }
