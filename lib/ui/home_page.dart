@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/route_manager.dart';
+import 'package:kppmining_calculator/component/appbar.component.dart';
 import 'package:kppmining_calculator/ui/calculator/calculator.page.dart';
 import 'package:kppmining_calculator/ui/checklist/checklist.page.dart';
 
@@ -9,38 +10,37 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buttonHome(
-                icon: 'assets/svg/table.svg',
-                title: 'Tabel Kedalaman',
-              ),
-              _buttonHome(
-                icon: 'assets/svg/calculator.svg',
-                title: 'Calculator PF &T',
-                onTap: () {
-                  Get.to(const CalculatorPage());
-                },
-              ),
-              _buttonHome(
-                icon: 'assets/svg/check-square.svg',
-                title: 'Checklist',
-                color: Colors.white,
-                textColor: Colors.green,
-                onTap: () {
-                  Get.to(const ChecklistPage());
-                },
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: const AppBarCustom(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buttonHome(
+              icon: 'assets/svg/table.svg',
+              title: 'Tabel Kedalaman',
+            ),
+            _buttonHome(
+              icon: 'assets/svg/calculator.svg',
+              title: 'Calculator PF &T',
+              color: const Color.fromARGB(255, 2, 83, 45),
+              onTap: () {
+                Get.to(const CalculatorPage());
+              },
+            ),
+            _buttonHome(
+              icon: 'assets/svg/check-square.svg',
+              title: 'Checklist',
+              color: Colors.white,
+              textColor: Colors.green,
+              onTap: () {
+                Get.to(const ChecklistPage());
+              },
+            ),
+          ],
         ),
       ),
     );

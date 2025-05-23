@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kppmining_calculator/component/appbar.component.dart';
 import 'package:kppmining_calculator/controller/checklist/checklist_controller.dart';
 
 class ChecklistPage extends StatelessWidget {
@@ -10,7 +11,7 @@ class ChecklistPage extends StatelessWidget {
     final controller = Get.put(ChecklistController());
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Checklist")),
+      appBar: const AppBarCustom(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Obx(() => Container(

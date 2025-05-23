@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'LedakIn',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 241, 238, 238),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

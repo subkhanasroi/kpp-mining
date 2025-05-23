@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kppmining_calculator/component/appbar.component.dart';
 import 'package:kppmining_calculator/controller/calculator/calculator_controller.dart';
 
 class CalculatorPage extends StatelessWidget {
@@ -10,7 +11,7 @@ class CalculatorPage extends StatelessWidget {
     final controller = Get.put(CalculatorController());
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Calculator")),
+      appBar: const AppBarCustom(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GetBuilder<CalculatorController>(
