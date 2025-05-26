@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:kppmining_calculator/model/date.model.dart';
 
 class ChangeDateDialogWidget extends StatelessWidget {
   const ChangeDateDialogWidget({super.key});
@@ -147,12 +148,13 @@ class ChangeDateDialogWidget extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            // dataList[0]['value'] = tanggalController.text;
-            // dataList[1]['value'] =
-            //     '${jamMulaiController.text} - ${jamSelesaiController.text}';
-            // dataList[2]['value'] = lokasiController.text;
-            // dataList[3]['value'] = rlController.text;
-            // Get.back();
+            Get.back(
+                result: DateModel(
+              tanggal: tanggalController.text,
+              jam: '${jamMulaiController.text}/${jamSelesaiController.text}',
+              lokasi: lokasiController.text,
+              rl: rlController.text,
+            ));
           },
           child: const Text('Simpan'),
         ),
