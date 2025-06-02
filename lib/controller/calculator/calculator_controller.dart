@@ -57,7 +57,7 @@ class CalculatorController extends GetxController {
 
     double tHasil = depth - (pfHasil / 25);
 
-    resultPf.text = pfHasil.toStringAsFixed(3);
-    resultT.text = tHasil.toStringAsFixed(3);
+    resultPf.text = pfHasil.toStringAsFixed(2);
+    resultT.text = tHasil.toStringAsFixed(2);
   }
 }
