@@ -78,7 +78,7 @@ class ChecklistPage extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: controller.resetTanggal,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.grey.shade300,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -86,7 +86,7 @@ class ChecklistPage extends StatelessWidget {
                             child: const Text(
                               'Hapus Tanggal',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -134,103 +134,128 @@ class ChecklistPage extends StatelessWidget {
                           blurStyle: BlurStyle.outer,
                           blurRadius: 2)
                     ]),
-                child: SingleChildScrollView(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey.shade400),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 42,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'Checklist Aktivitas Drilling',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w700),
                         ),
-                      ],
+                      ),
                     ),
-                    child: Obx(() => Table(
-                          border: TableBorder.symmetric(
-                            inside: BorderSide(color: Colors.grey.shade300),
-                            outside: BorderSide.none,
-                          ),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: const {
-                            0: FlexColumnWidth(1),
-                            1: FlexColumnWidth(4),
-                            2: FlexColumnWidth(1),
-                            3: FlexColumnWidth(1),
-                          },
-                          children: [
-                            // Header
-                            const TableRow(
-                              decoration: BoxDecoration(color: Colors.white),
-                              children: [
-                                Center(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Text("No",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)))),
-                                Padding(
-                                    padding: EdgeInsets.all(8),
-                                    child: Text("Item Pemeriksaan",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold))),
-                                Center(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Text("Ya",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)))),
-                                Center(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(8),
-                                        child: Text("Tidak",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)))),
-                              ],
-                            ),
-                            // Rows
-                            for (int i = 0;
-                                i < controller.checklistItems.length;
-                                i++)
-                              TableRow(
-                                children: [
-                                  Center(
-                                      child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text("${i + 1}"))),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      controller.checklistItems[i].question,
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Checkbox(
-                                      value: controller
-                                              .checklistItems[i].isCheckedYes ==
-                                          true,
-                                      onChanged: (val) =>
-                                          controller.updateChecklist(i, true),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Checkbox(
-                                      value: controller
-                                              .checklistItems[i].isCheckedYes ==
-                                          false,
-                                      onChanged: (val) =>
-                                          controller.updateChecklist(i, false),
-                                    ),
-                                  ),
-                                ],
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.grey.shade400),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 4),
                               ),
-                          ],
-                        )),
-                  ),
+                            ],
+                          ),
+                          child: Obx(() => Table(
+                                border: TableBorder.symmetric(
+                                  inside:
+                                      BorderSide(color: Colors.grey.shade300),
+                                  outside: BorderSide.none,
+                                ),
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                columnWidths: const {
+                                  0: FlexColumnWidth(1),
+                                  1: FlexColumnWidth(4),
+                                  2: FlexColumnWidth(1),
+                                  3: FlexColumnWidth(1),
+                                },
+                                children: [
+                                  // Header
+                                  const TableRow(
+                                    decoration:
+                                        BoxDecoration(color: Colors.white),
+                                    children: [
+                                      Center(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text("No",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)))),
+                                      Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text("Item Pemeriksaan",
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                      Center(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text("Ya",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)))),
+                                      Center(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Text("Tidak",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold)))),
+                                    ],
+                                  ),
+                                  // Rows
+                                  for (int i = 0;
+                                      i < controller.checklistItems.length;
+                                      i++)
+                                    TableRow(
+                                      children: [
+                                        Center(
+                                            child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8),
+                                                child: Text("${i + 1}"))),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            controller
+                                                .checklistItems[i].question,
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Checkbox(
+                                            value: controller.checklistItems[i]
+                                                    .isCheckedYes ==
+                                                true,
+                                            onChanged: (val) => controller
+                                                .updateChecklist(i, true),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Checkbox(
+                                            value: controller.checklistItems[i]
+                                                    .isCheckedYes ==
+                                                false,
+                                            onChanged: (val) => controller
+                                                .updateChecklist(i, false),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              )),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

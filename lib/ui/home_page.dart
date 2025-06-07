@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:kppmining_calculator/component/appbar.component.dart';
 import 'package:kppmining_calculator/ui/calculator/calculator.page.dart';
 import 'package:kppmining_calculator/ui/checklist/checklist.page.dart';
+import 'package:kppmining_calculator/ui/table/table.page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,9 +21,11 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buttonHome(
-              icon: 'assets/svg/table.svg',
-              title: 'Tabel Kedalaman',
-            ),
+                icon: 'assets/svg/table.svg',
+                title: 'Tabel Kedalaman',
+                onTap: () {
+                  Get.to(const TablePage());
+                }),
             _buttonHome(
               icon: 'assets/svg/calculator.svg',
               title: 'Calculator PF &T',
