@@ -12,8 +12,11 @@ class CalculatorPage extends StatelessWidget {
 
     return Scaffold(
       appBar: const AppBarCustom(),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16), color: Colors.white),
         padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.all(16.0),
         child: GetBuilder<CalculatorController>(
           init: CalculatorController(),
           builder: (_) {
