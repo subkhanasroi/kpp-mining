@@ -12,8 +12,11 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Align(
-          alignment: Alignment.centerLeft,
-          child: Image.asset('assets/png/logo-kpp.png')),
+          alignment: Alignment.bottomLeft,
+          child: Image.asset(
+            'assets/png/logo-kpp.png',
+            height: 64,
+          )),
     );
   }
 }
