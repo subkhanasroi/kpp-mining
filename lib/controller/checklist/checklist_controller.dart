@@ -23,6 +23,7 @@ class ChecklistController extends GetxController {
       lokasi: '-',
       rl: '-',
     ).obs;
+
     checklistItems = <ChecklistItemModel>[
       ChecklistItemModel(
           question:

@@ -52,7 +52,7 @@ class TablePage extends StatelessWidget {
                             Expanded(
                               child: SizedBox(
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: controller.gotoEditData,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.green,
                                     shape: RoundedRectangleBorder(

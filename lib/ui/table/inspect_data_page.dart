@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:kppmining_calculator/component/appbar.component.dart';
+import 'package:kppmining_calculator/controller/table/table.controller.dart';
 import 'package:kppmining_calculator/model/inspect_data.model.dart';
 
 class InspectionForPage extends StatelessWidget {
@@ -12,8 +15,29 @@ class InspectionForPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(TableController());
+
     return Scaffold(
         appBar: const AppBarCustom(),
+        floatingActionButton: InkWell(
+          onTap: controller.gotoEditData,
+          child: Container(
+            decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 31, 183, 36),
+                    Color.fromARGB(255, 134, 165, 89)
+                  ],
+                )),
+            height: 64,
+            width: 64,
+            child: const Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: ListView(
@@ -79,68 +103,10 @@ class InspectionForPage extends StatelessWidget {
                     const Text('Catatan:',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
-                    const TextField(
-                        maxLines: 2,
-                        decoration: InputDecoration(
-                          hintText: 'Tambahkan catatan...',
-                          hintStyle: TextStyle(color: Colors.grey),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          disabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey)),
+                    Text(data.note,
+                        style: const TextStyle(
+                          fontSize: 16,
                         )),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: const Text(
-                                'Simpan',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey.shade300,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: const Text(
-                                'Reset',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

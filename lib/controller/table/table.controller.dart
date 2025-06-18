@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kppmining_calculator/component/depth_dialog.dart';
 import 'package:kppmining_calculator/model/inspect_data.model.dart';
+import 'package:kppmining_calculator/ui/table/inspect_data_form.dart';
 import 'package:kppmining_calculator/ui/table/inspect_data_page.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
@@ -89,6 +90,12 @@ class TableController extends GetxController {
     );
   }
 
+  void gotoEditData() {
+    final result = Get.to(InspectionFormPage());
+
+    debugPrint("RESULTT $result");
+  }
+
   void calculateSummary() {
     int count = 0;
     double total = 0.0;
@@ -134,7 +141,7 @@ class TableController extends GetxController {
 
     pdf.addPage(
       pw.Page(
-        margin: pw.EdgeInsets.all(8),
+        margin: const pw.EdgeInsets.all(8),
         pageFormat: PdfPageFormat.a4.landscape,
         build: (context) {
           return pw.Padding(
