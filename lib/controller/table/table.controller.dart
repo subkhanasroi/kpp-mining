@@ -6,8 +6,10 @@ import 'package:kppmining_calculator/model/inspect_data.model.dart';
 import 'package:kppmining_calculator/ui/table/inspect_data_form.dart';
 import 'package:kppmining_calculator/ui/table/inspect_data_page.dart';
 import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:intl/intl.dart';
 
 class TableController extends GetxController {
   final rowCount = 20.obs;
@@ -19,10 +21,28 @@ class TableController extends GetxController {
   final volume = 0.0.obs;
 
   late RxList<RxList<String>> cellValues;
+  late Rx<InspectionFormModel> dataTanggal;
 
   @override
   void onInit() {
     super.onInit();
+    dataTanggal = InspectionFormModel(
+      pit: '',
+      date: DateFormat('EEEE,dd/MM/yyyy', 'id').format(DateTime.now()),
+      shift: '',
+      typeBit: '',
+      diameterHole: null,
+      burden: null,
+      spacing: null,
+      totalHole: null,
+      averageDepth: null,
+      cnUnit: '',
+      totalHoleStatus: null,
+      wet: false,
+      dry: false,
+      collapse: false,
+      note: '',
+    ).obs;
     initTable(rowCount.value, colCount.value);
   }
 
@@ -65,35 +85,21 @@ class TableController extends GetxController {
   }
 
   void getToInspectData() {
-    final emptyModel = InspectionFormModel(
-      pit: '',
-      date: '',
-      shift: '',
-      typeBit: '',
-      diameterHole: null,
-      burden: null,
-      spacing: null,
-      totalHole: null,
-      averageDepth: null,
-      cnUnit: '',
-      totalHoleStatus: null,
-      wet: false,
-      dry: false,
-      collapse: false,
-      note: '',
-    );
-
     Get.to(
       () => InspectionForPage(
-        data: emptyModel,
+        data: dataTanggal.value,
       ),
     );
   }
 
-  void gotoEditData() {
-    final result = Get.to(InspectionFormPage());
+  void gotoEditData() async {
+    final result = await Get.to(InspectionFormPage(
+      initialData: dataTanggal.value, // passing data existing
+    ));
 
-    debugPrint("RESULTT $result");
+    if (result != null && result is InspectionFormModel) {
+      dataTanggal.value = result; // update reactive value
+    }
   }
 
   void calculateSummary() {
@@ -118,19 +124,6 @@ class TableController extends GetxController {
     volume.value = count > 0 ? patternArea * avgDepth.value * count : 0;
   }
 
-  void showLoading() {
-    Get.dialog(
-      const Center(child: CircularProgressIndicator()),
-      barrierDismissible: false,
-    );
-  }
-
-  void hideLoading() {
-    if (Get.isDialogOpen ?? false) {
-      Get.back();
-    }
-  }
-
   Future<void> exportToPdf() async {
     final pdf = pw.Document();
     final rows = rowCount.value;
@@ -138,6 +131,8 @@ class TableController extends GetxController {
     final image = pw.MemoryImage(
       (await rootBundle.load('assets/png/logo-kpp.png')).buffer.asUint8List(),
     );
+    final customFont =
+        pw.Font.ttf(await rootBundle.load('assets/font/DejaVuSans.ttf'));
 
     pdf.addPage(
       pw.Page(
@@ -188,11 +183,11 @@ class TableController extends GetxController {
                           ),
                         ),
                         buildLokasiDataVerticalTable(
-                          ptt: '74',
-                          date: 'A',
-                          shift: '8',
-                          typeByt: '200',
-                          rl: '',
+                          ptt: dataTanggal.value.pit,
+                          date: dataTanggal.value.date,
+                          shift: dataTanggal.value.shift,
+                          typeByt: dataTanggal.value.typeBit,
+                          rl: "",
                         ),
                       ])
                     ]),
@@ -209,14 +204,15 @@ class TableController extends GetxController {
                       children: [
                         buildBrickTable(rows, cols),
                         buildFormulirPanel(
-                          totalHole: '${holeCount.value}',
-                          avgDepth: avgDepth.value.toStringAsFixed(2),
-                          volume: volume.value.toStringAsFixed(2),
-                          cnUnit: 'DR-0024',
-                          dry: '24',
-                          wet: '',
-                          collapse: '',
-                        ),
+                            totalHole: '${holeCount.value}',
+                            avgDepth: avgDepth.value.toStringAsFixed(2),
+                            volume: volume.value.toStringAsFixed(2),
+                            cnUnit: dataTanggal.value.cnUnit,
+                            dry: dataTanggal.value.dry ? '✔' : 'X',
+                            wet: dataTanggal.value.wet ? '✔' : 'X',
+                            collapse: dataTanggal.value.collapse ? '✔' : 'X',
+                            customFont: customFont,
+                            data: dataTanggal.value),
                       ],
                     ),
                   ],
@@ -295,37 +291,44 @@ class TableController extends GetxController {
     );
   }
 
-  pw.Widget buildFormulirPanel({
-    required String totalHole,
-    required String avgDepth,
-    required String volume,
-    String cnUnit = '',
-    String dry = '',
-    String wet = '',
-    String collapse = '',
-  }) {
+  pw.Widget buildFormulirPanel(
+      {required String totalHole,
+      required String avgDepth,
+      required String volume,
+      String cnUnit = '',
+      String dry = '',
+      String wet = '',
+      String collapse = '',
+      InspectionFormModel? data,
+      Font? customFont}) {
     const style = pw.TextStyle(fontSize: 7);
+
     return pw.Container(
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           buildLokasiDataTable(
-            blok: 'A',
-            strip: '8',
-            elev: '200',
+            blok: '',
+            strip: '',
+            elev: '',
             rl: '',
           ),
+
           buildDiameter(
             diameter: 'Hole(mm)',
             burden: '(m)',
             spacing: '(m)',
             totalHole: '(buah)',
+            diameterV: data?.diameterHole.toString() ?? '',
+            burdenV: data?.burden.toString() ?? '',
+            spacingV: data?.spacing.toString() ?? '',
+            totalHoleV: data?.totalHole.toString() ?? '',
           ),
           _formRow('CN UNIT', cnUnit),
           _formRow('Total Hole', totalHole),
-          _formRow('Wet', wet),
-          _formRow('Dry', dry),
-          _formRow('Collapse', collapse),
+          _formRow('Wet', wet, font: customFont),
+          _formRow('Dry', dry, font: customFont),
+          _formRow('Collapse', collapse, font: customFont),
           _formRow('Average Depth (m)', avgDepth),
           _formRow('Volume', volume),
 
@@ -338,7 +341,12 @@ class TableController extends GetxController {
             ),
             height: 60,
             alignment: pw.Alignment.topLeft,
-            child: pw.Text('Catatan:', style: style),
+            child: pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text('Catatan:', style: style),
+                  pw.Text(dataTanggal.value.note, style: style)
+                ]),
           ),
 
           pw.SizedBox(height: 16),
@@ -371,7 +379,7 @@ class TableController extends GetxController {
     );
   }
 
-  pw.Widget _formRow(String label, String value) {
+  pw.Widget _formRow(String label, String value, {Font? font}) {
     return pw.Container(
       width: double.infinity,
       height: 20,
@@ -385,7 +393,10 @@ class TableController extends GetxController {
             child: pw.Container(
               padding: const pw.EdgeInsets.symmetric(horizontal: 6),
               alignment: pw.Alignment.centerLeft,
-              child: pw.Text(label, style: const pw.TextStyle(fontSize: 7)),
+              child: pw.Text(label,
+                  style: pw.TextStyle(
+                    fontSize: 7,
+                  )),
             ),
           ),
 
@@ -400,7 +411,8 @@ class TableController extends GetxController {
             child: pw.Container(
               padding: const pw.EdgeInsets.symmetric(horizontal: 6),
               alignment: pw.Alignment.centerLeft,
-              child: pw.Text(value, style: const pw.TextStyle(fontSize: 7)),
+              child:
+                  pw.Text(value, style: pw.TextStyle(fontSize: 7, font: font)),
             ),
           ),
         ],
@@ -457,6 +469,10 @@ class TableController extends GetxController {
     String burden = '',
     String spacing = '',
     String totalHole = '',
+    String diameterV = '',
+    String burdenV = '',
+    String spacingV = '',
+    String totalHoleV = '',
   }) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -484,10 +500,13 @@ class TableController extends GetxController {
             // Baris nilai
             pw.TableRow(
               children: [
-                _lokasiValueCell(diameter, position: pw.Alignment.bottomCenter),
-                _lokasiValueCell(burden, position: pw.Alignment.bottomCenter),
-                _lokasiValueCell(spacing, position: pw.Alignment.bottomCenter),
-                _lokasiValueCell(totalHole,
+                _lokasiValueCell('$diameterV\n\n$diameter',
+                    position: pw.Alignment.bottomCenter),
+                _lokasiValueCell('$burdenV\n\n$burden',
+                    position: pw.Alignment.bottomCenter),
+                _lokasiValueCell('$spacingV\n\n$spacing',
+                    position: pw.Alignment.bottomCenter),
+                _lokasiValueCell('$totalHoleV\n\n$totalHole',
                     position: pw.Alignment.bottomCenter),
               ],
             ),
@@ -553,7 +572,8 @@ class TableController extends GetxController {
       height: 32,
       alignment: position,
       padding: const pw.EdgeInsets.all(4),
-      child: pw.Text(text, style: const pw.TextStyle(fontSize: 7)),
+      child: pw.Text(text,
+          style: const pw.TextStyle(fontSize: 7), textAlign: TextAlign.center),
     );
   }
 

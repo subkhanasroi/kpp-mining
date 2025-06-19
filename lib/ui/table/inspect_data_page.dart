@@ -110,7 +110,6 @@ class InspectionForPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(data.note, style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 16),
             ],
           ),

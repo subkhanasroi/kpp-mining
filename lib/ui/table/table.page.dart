@@ -39,14 +39,17 @@ class TablePage extends StatelessWidget {
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                         ),
-                        Column(
-                          children: [
-                            _buildDateTime('PIT', ''),
-                            _buildDateTime('HARI/Tanggal', ''),
-                            _buildDateTime('Shift', ''),
-                            _buildDateTime('Type Bit', ''),
-                          ],
-                        ),
+                        Obx(() {
+                          final data = controller.dataTanggal.value;
+                          return Column(
+                            children: [
+                              _buildDateTime('PIT', data.pit),
+                              _buildDateTime('HARI/Tanggal', data.date),
+                              _buildDateTime('Shift', data.shift),
+                              _buildDateTime('Type Bit', data.typeBit),
+                            ],
+                          );
+                        }),
                         Row(
                           children: [
                             Expanded(

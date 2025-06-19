@@ -5,7 +5,8 @@ import 'package:kppmining_calculator/model/inspect_data.model.dart';
 import 'package:intl/intl.dart';
 
 class InspectionFormPage extends StatefulWidget {
-  const InspectionFormPage({super.key});
+  const InspectionFormPage({super.key, this.initialData});
+  final InspectionFormModel? initialData;
 
   @override
   State<InspectionFormPage> createState() => _InspectionFormPageState();
@@ -17,7 +18,7 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
   // Controllers
   final pitC = TextEditingController();
   final dateC = TextEditingController(
-      text: DateFormat('dd-MM-yyyy').format(DateTime.now()));
+      text: DateFormat('EEEE,dd/MM/yyyy', 'id').format(DateTime.now()));
   final shiftC = TextEditingController();
   final typeBitC = TextEditingController();
   final diameterHoleC = TextEditingController();
@@ -33,6 +34,28 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
   bool wet = false;
   bool dry = false;
   bool collapse = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final d = widget.initialData;
+
+    pitC.text = d?.pit ?? '';
+    dateC.text = d?.date ?? DateFormat('dd-MM-yyyy').format(DateTime.now());
+    shiftC.text = d?.shift ?? '';
+    typeBitC.text = d?.typeBit ?? '';
+    diameterHoleC.text = d?.diameterHole?.toString() ?? '';
+    burdenC.text = d?.burden?.toString() ?? '';
+    spacingC.text = d?.spacing?.toString() ?? '';
+    totalHoleC.text = d?.totalHole?.toString() ?? '';
+    averageDepthC.text = d?.averageDepth?.toString() ?? '';
+    cnUnitC.text = d?.cnUnit ?? '';
+    totalHoleStatusC.text = d?.totalHoleStatus?.toString() ?? '';
+    noteC.text = d?.note ?? '';
+    wet = d?.wet ?? false;
+    dry = d?.dry ?? false;
+    collapse = d?.collapse ?? false;
+  }
 
   @override
   void dispose() {
@@ -117,7 +140,7 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
           padding: const EdgeInsets.all(16),
           children: [
             _buildField('PIT', pitC),
-            _buildField('Hari/Tanggal', dateC),
+            _buildDatePickerField('Hari/Tanggal', dateC),
             _buildField('Shift', shiftC),
             _buildField('Type Bit', typeBitC),
             _buildField('Diameter Hole (mm)', diameterHoleC,
@@ -160,6 +183,44 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDatePickerField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: GestureDetector(
+        onTap: () async {
+          final pickedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            locale: const Locale('id'), // Untuk Bahasa Indonesia
+          );
+          if (pickedDate != null) {
+            controller.text =
+                DateFormat('EEEE, dd/MM/yyyy', 'id').format(pickedDate);
+          }
+        },
+        child: AbsorbPointer(
+          child: TextFormField(
+            controller: controller,
+            validator: (value) =>
+                value == null || value.isEmpty ? 'Wajib diisi' : null,
+            decoration: InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              labelText: label,
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.green),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              suffixIcon: const Icon(Icons.calendar_today),
+            ),
+          ),
         ),
       ),
     );
