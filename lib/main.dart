@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kppmining_calculator/splash_screen.dart';
 import 'package:kppmining_calculator/ui/home_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         Locale('id'), // ← Bahasa Indonesia
         Locale('en'), // (opsional)
       ],
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }

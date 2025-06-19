@@ -19,20 +19,37 @@ class AddQuestionDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade300,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
           onPressed: () {
             Get.back();
           },
-          child: const Text('Batal'),
+          child: const Text(
+            'Batal',
+            style: TextStyle(color: Colors.black),
+          ),
         ),
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
           onPressed: () {
             String question = _questionController.text.trim();
             if (question.isNotEmpty) {
               Get.back(result: question);
             }
           },
-          child: const Text('Tambah'),
+          child: const Text('Tambah', style: TextStyle(color: Colors.white)),
         ),
       ],
     );

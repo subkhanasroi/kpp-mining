@@ -22,13 +22,13 @@ class HomePage extends StatelessWidget {
           children: [
             _buttonHome(
                 icon: 'assets/svg/table.svg',
-                title: 'Tabel Kedalaman',
+                title: 'Tabel\nKedalaman',
                 onTap: () {
                   Get.to(const TablePage());
                 }),
             _buttonHome(
               icon: 'assets/svg/calculator.svg',
-              title: 'Calculator PF &T',
+              title: 'Calculator\nPF &T',
               color: const Color.fromARGB(255, 2, 83, 45),
               onTap: () {
                 Get.to(const CalculatorPage());
@@ -85,6 +85,7 @@ class HomePage extends StatelessWidget {
                 Center(
                   child: Text(
                     title ?? '',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: textColor ?? Colors.white,
                       fontSize: 32,

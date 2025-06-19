@@ -215,6 +215,16 @@ class TablePage extends StatelessWidget {
                                         ),
                                         actions: [
                                           ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
                                             onPressed: () {
                                               final rows =
                                                   int.tryParse(rowCtrl.text) ??
@@ -233,7 +243,15 @@ class TablePage extends StatelessWidget {
                                                     'Jumlah baris dan kolom tidak boleh lebih dari 20');
                                               }
                                             },
-                                            child: const Text('Generate Grid'),
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8),
+                                              child: Text(
+                                                'Generate Grid',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
                                           )
                                         ],
                                       );
