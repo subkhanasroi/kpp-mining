@@ -117,7 +117,7 @@ class TablePage extends StatelessWidget {
                               fontWeight: FontWeight.w700, fontSize: 14),
                         ),
                         Obx(() => Text(
-                              controller.patternText.value,
+                              ' ${controller.patternText.value}',
                               style: const TextStyle(fontSize: 14),
                             )),
                         const Spacer(),
@@ -125,31 +125,16 @@ class TablePage extends StatelessWidget {
                           width: 150,
                           child: ElevatedButton(
                             onPressed: () {
-                              final rowCtrl = TextEditingController(
-                                  text: controller.rowCount.value.toString());
-                              final colCtrl = TextEditingController(
-                                  text: controller.colCount.value.toString());
-
                               final patternOptions = [
-                                '8x7',
-                                '8x8',
-                                '8x9',
-                                '9x7',
-                                '9x8',
-                                '9x9'
+                                "6x7",
+                                "7.5x8.5",
+                                "7x8",
+                                "8x8",
+                                "8x9",
+                                "9x10",
                               ];
                               String selectedPattern =
                                   controller.patternText.value;
-
-                              void updateTextControllers(String pattern) {
-                                final parts = pattern.split('x');
-                                if (parts.length == 2) {
-                                  rowCtrl.text = parts[0];
-                                  colCtrl.text = parts[1];
-                                }
-                              }
-
-                              updateTextControllers(selectedPattern);
 
                               showDialog(
                                 context: context,
@@ -177,13 +162,102 @@ class TablePage extends StatelessWidget {
                                                 if (value != null) {
                                                   setState(() {
                                                     selectedPattern = value;
-                                                    updateTextControllers(
-                                                        value);
+                                                    controller
+                                                        .setPattern(value);
                                                   });
                                                 }
                                               },
                                             ),
-                                            const SizedBox(height: 12),
+                                          ],
+                                        ),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8),
+                                              child: Text(
+                                                'Select Pattern',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Edit Pattern',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Row(
+                      children: [
+                        const Text(
+                          'Table:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 14),
+                        ),
+                        Obx(() => Text(
+                              ' ${controller.rowCount.toString()}x${controller.colCount.toString()}',
+                              style: const TextStyle(fontSize: 14),
+                            )),
+                        const Spacer(),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              final rowCtrl = TextEditingController(
+                                  text: controller.rowCount.value.toString());
+                              final colCtrl = TextEditingController(
+                                  text: controller.colCount.value.toString());
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return AlertDialog(
+                                        title: const Text('Edit Table Pattern'),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
                                             Row(
                                               children: [
                                                 Expanded(

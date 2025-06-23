@@ -65,11 +65,14 @@ class TableController extends GetxController {
     return width * height;
   }
 
+  void setPattern(String pattern) {
+    patternText.value = pattern;
+  }
+
   void setDimensions({required int rows, required int cols}) {
     if (rows > 20 || cols > 20) return;
     rowCount.value = rows;
     colCount.value = cols;
-    patternText.value = '${rows}x$cols';
     initTable(rows, cols);
   }
 
