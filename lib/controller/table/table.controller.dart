@@ -38,9 +38,9 @@ class TableController extends GetxController {
       averageDepth: null,
       cnUnit: '',
       totalHoleStatus: null,
-      wet: false,
-      dry: false,
-      collapse: false,
+      wet: null,
+      dry: null,
+      collapse: null,
       note: '',
     ).obs;
     initTable(rowCount.value, colCount.value);
@@ -168,7 +168,7 @@ class TableController extends GetxController {
                               pw.SizedBox(width: 8),
                               pw.Expanded(
                                 child: pw.Text(
-                                  'PT. KALIMANTAN PRIMA PERSADA\nDistrict CAKAR',
+                                  'PT. KALIMANTAN PRIMA PERSADA',
                                   style: const pw.TextStyle(fontSize: 8),
                                 ),
                               ),
@@ -210,9 +210,9 @@ class TableController extends GetxController {
                             avgDepth: avgDepth.value.toStringAsFixed(2),
                             volume: volume.value.toStringAsFixed(2),
                             cnUnit: dataTanggal.value.cnUnit,
-                            dry: dataTanggal.value.dry ? '✔' : 'X',
-                            wet: dataTanggal.value.wet ? '✔' : 'X',
-                            collapse: dataTanggal.value.collapse ? '✔' : 'X',
+                            dry: dataTanggal.value.dry.toString(),
+                            wet: dataTanggal.value.wet.toString(),
+                            collapse: dataTanggal.value.collapse.toString(),
                             customFont: customFont,
                             data: dataTanggal.value),
                       ],

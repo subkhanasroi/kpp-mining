@@ -30,10 +30,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
   final totalHoleStatusC = TextEditingController();
   final noteC = TextEditingController();
 
-  // Checkbox values
-  bool wet = false;
-  bool dry = false;
-  bool collapse = false;
+  final wet = TextEditingController();
+  final dry = TextEditingController();
+  final collapse = TextEditingController();
 
   @override
   void initState() {
@@ -52,9 +51,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
     cnUnitC.text = d?.cnUnit ?? '';
     totalHoleStatusC.text = d?.totalHoleStatus?.toString() ?? '';
     noteC.text = d?.note ?? '';
-    wet = d?.wet ?? false;
-    dry = d?.dry ?? false;
-    collapse = d?.collapse ?? false;
+    wet.text = d?.wet.toString() ?? '';
+    dry.text = d?.dry.toString() ?? '';
+    collapse.text = d?.collapse.toString() ?? '';
   }
 
   @override
@@ -89,9 +88,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
         averageDepth: double.tryParse(averageDepthC.text),
         cnUnit: cnUnitC.text,
         totalHoleStatus: int.tryParse(totalHoleStatusC.text),
-        wet: wet,
-        dry: dry,
-        collapse: collapse,
+        wet: int.tryParse(wet.text),
+        dry: int.tryParse(dry.text),
+        collapse: int.tryParse(collapse.text),
         note: noteC.text,
       );
 
@@ -156,14 +155,10 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
             _buildField('C/N Unit', cnUnitC),
             _buildField('Total Hole Status', totalHoleStatusC,
                 keyboardType: TextInputType.number),
-            const SizedBox(height: 8),
-            _buildCheckbox(
-                'Wet', wet, (val) => setState(() => wet = val ?? false)),
-            _buildCheckbox(
-                'Dry', dry, (val) => setState(() => dry = val ?? false)),
-            _buildCheckbox('Collapse', collapse,
-                (val) => setState(() => collapse = val ?? false)),
-            _buildField('Catatan', noteC, isRequired: true),
+            _buildField('Wet', wet, keyboardType: TextInputType.number),
+            _buildField('Dry', dry, keyboardType: TextInputType.number),
+            _buildField('Collapse', collapse,
+                keyboardType: TextInputType.number),
             const SizedBox(height: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

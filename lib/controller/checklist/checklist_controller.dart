@@ -143,7 +143,7 @@ class ChecklistController extends GetxController {
                         pw.SizedBox(width: 8),
                         pw.Expanded(
                           child: pw.Text(
-                            'PT. KALIMANTAN PRIMA PERSADA\nDistrict CAKAR',
+                            'PT. KALIMANTAN PRIMA PERSADA',
                             style: const pw.TextStyle(fontSize: 8),
                           ),
                         ),
