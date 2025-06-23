@@ -309,8 +309,6 @@ class TablePage extends StatelessWidget {
                                               if (rows <= 20 && cols <= 20) {
                                                 controller.setDimensions(
                                                     rows: rows, cols: cols);
-                                                controller.patternText.value =
-                                                    "$rows x $cols";
                                                 Get.back();
                                               } else {
                                                 Get.snackbar('Maksimal 20',
