@@ -94,11 +94,11 @@ class TableController extends GetxController {
 
   void gotoEditData() async {
     final result = await Get.to(InspectionFormPage(
-      initialData: dataTanggal.value, // passing data existing
+      initialData: dataTanggal.value,
     ));
 
     if (result != null && result is InspectionFormModel) {
-      dataTanggal.value = result; // update reactive value
+      dataTanggal.value = result;
     }
   }
 
@@ -121,6 +121,8 @@ class TableController extends GetxController {
     totalDepth.value = total;
     holeCount.value = count;
     avgDepth.value = count > 0 ? total / count : 0;
+    debugPrint(
+        'pattern ${patternText.value} =  $patternArea ,${avgDepth.value} , $count  = ${patternArea * avgDepth.value * count}');
     volume.value = count > 0 ? patternArea * avgDepth.value * count : 0;
   }
 

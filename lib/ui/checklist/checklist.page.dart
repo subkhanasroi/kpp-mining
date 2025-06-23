@@ -202,9 +202,9 @@ class ChecklistPage extends StatelessWidget {
                                     TableCellVerticalAlignment.middle,
                                 columnWidths: const {
                                   0: FlexColumnWidth(1),
-                                  1: FlexColumnWidth(4),
-                                  2: FlexColumnWidth(1),
-                                  3: FlexColumnWidth(1),
+                                  1: FlexColumnWidth(3),
+                                  2: FlexColumnWidth(1.25),
+                                  3: FlexColumnWidth(1.25),
                                 },
                                 children: [
                                   // Header
@@ -235,10 +235,12 @@ class ChecklistPage extends StatelessWidget {
                                       Center(
                                           child: Padding(
                                               padding: EdgeInsets.all(8),
-                                              child: Text("Tidak",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)))),
+                                              child: FittedBox(
+                                                child: Text("Tidak",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ))),
                                     ],
                                   ),
                                   // Rows

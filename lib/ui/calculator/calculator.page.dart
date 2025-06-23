@@ -20,7 +20,8 @@ class CalculatorPage extends StatelessWidget {
         child: GetBuilder<CalculatorController>(
           init: CalculatorController(),
           builder: (_) {
-            return ListView(
+            return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Obx(() {
                   return _buildDropdown(
