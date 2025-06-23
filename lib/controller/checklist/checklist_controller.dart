@@ -262,16 +262,6 @@ class ChecklistController extends GetxController {
     );
   }
 
-  pw.Widget _infoCell(String label, String value) {
-    return pw.Row(
-      children: [
-        pw.Text('$label: ',
-            style: pw.TextStyle(fontSize: 8, fontWeight: pw.FontWeight.bold)),
-        pw.Text(value, style: const pw.TextStyle(fontSize: 8)),
-      ],
-    );
-  }
-
   pw.Widget _tableHeader(String text) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(4),
@@ -328,8 +318,6 @@ class ChecklistController extends GetxController {
     String lokasi = '',
     String rl = '',
   }) {
-    const style = pw.TextStyle(fontSize: 7);
-
     return pw.Table(
       border: pw.TableBorder.all(width: 0.5),
       columnWidths: const {

@@ -10,9 +10,9 @@ class InspectionFormModel {
   final double? averageDepth;
   final String cnUnit;
   final int? totalHoleStatus;
-  final int? wet;
-  final int? dry;
-  final int? collapse;
+  final String? wet;
+  final String? dry;
+  final String? collapse;
   final String note;
 
   InspectionFormModel({

@@ -396,7 +396,7 @@ class TableController extends GetxController {
               padding: const pw.EdgeInsets.symmetric(horizontal: 6),
               alignment: pw.Alignment.centerLeft,
               child: pw.Text(label,
-                  style: pw.TextStyle(
+                  style: const pw.TextStyle(
                     fontSize: 7,
                   )),
             ),
@@ -525,8 +525,6 @@ class TableController extends GetxController {
     String typeByt = '',
     String rl = '',
   }) {
-    const style = pw.TextStyle(fontSize: 7);
-
     return pw.Table(
       border: pw.TableBorder.all(width: 0.5),
       columnWidths: const {
@@ -576,23 +574,6 @@ class TableController extends GetxController {
       padding: const pw.EdgeInsets.all(4),
       child: pw.Text(text,
           style: const pw.TextStyle(fontSize: 7), textAlign: TextAlign.center),
-    );
-  }
-
-  pw.TableRow _lokasiRow(String label, String value) {
-    return pw.TableRow(
-      children: [
-        pw.Container(
-          padding: const pw.EdgeInsets.all(4),
-          alignment: pw.Alignment.centerLeft,
-          child: pw.Text(label, style: const pw.TextStyle(fontSize: 7)),
-        ),
-        pw.Container(
-          padding: const pw.EdgeInsets.all(4),
-          alignment: pw.Alignment.centerLeft,
-          child: pw.Text(value, style: const pw.TextStyle(fontSize: 7)),
-        ),
-      ],
     );
   }
 }

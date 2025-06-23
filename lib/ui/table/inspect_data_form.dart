@@ -51,9 +51,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
     cnUnitC.text = d?.cnUnit ?? '';
     totalHoleStatusC.text = d?.totalHoleStatus?.toString() ?? '';
     noteC.text = d?.note ?? '';
-    wet.text = d?.wet.toString() ?? '';
-    dry.text = d?.dry.toString() ?? '';
-    collapse.text = d?.collapse.toString() ?? '';
+    wet.text = d?.wet ?? '';
+    dry.text = d?.dry ?? '';
+    collapse.text = d?.collapse ?? '';
   }
 
   @override
@@ -71,6 +71,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
     cnUnitC.dispose();
     totalHoleStatusC.dispose();
     noteC.dispose();
+    wet.dispose();
+    dry.dispose();
+    collapse.dispose();
     super.dispose();
   }
 
@@ -88,9 +91,9 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
         averageDepth: double.tryParse(averageDepthC.text),
         cnUnit: cnUnitC.text,
         totalHoleStatus: int.tryParse(totalHoleStatusC.text),
-        wet: int.tryParse(wet.text),
-        dry: int.tryParse(dry.text),
-        collapse: int.tryParse(collapse.text),
+        wet: wet.text,
+        dry: dry.text,
+        collapse: collapse.text,
         note: noteC.text,
       );
 
@@ -114,18 +117,10 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
           filled: true,
           labelText: label,
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green),
+              borderSide: const BorderSide(color: Colors.green),
               borderRadius: BorderRadius.circular(16)),
         ),
       ),
-    );
-  }
-
-  Widget _buildCheckbox(String label, bool value, Function(bool?) onChanged) {
-    return CheckboxListTile(
-      title: Text(label),
-      value: value,
-      onChanged: onChanged,
     );
   }
 
