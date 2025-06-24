@@ -1,6 +1,13 @@
-class ChecklistItemModel {
-  final String question;
-  bool? isCheckedYes;
+import 'package:kppmining_calculator/controller/checklist/checklist_controller.dart';
 
-  ChecklistItemModel({required this.question, this.isCheckedYes});
+class ChecklistItemModel {
+  String question;
+  bool? isCheckedYes;
+  ChecklistCategory category;
+
+  ChecklistItemModel({
+    required this.question,
+    this.isCheckedYes,
+    required this.category,
+  });
 }

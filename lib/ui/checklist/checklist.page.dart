@@ -9,6 +9,63 @@ class ChecklistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ChecklistController());
+    List<TableRow> buildChecklistGroup(
+        ChecklistCategory category, String label) {
+      final items = controller.checklistItems
+          .where((e) => e.category == category)
+          .toList();
+      List<TableRow> rows = [];
+
+      // Add label row spanning all columns (no vertical dividers)
+      rows.add(TableRow(
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 255, 255, 255), // warna abu terang
+        ),
+        children: [
+          const SizedBox(),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(),
+          const SizedBox(),
+        ],
+      ));
+
+      // Add checklist items
+      rows.addAll(List.generate(items.length, (i) {
+        final item = items[i];
+        return TableRow(children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text('${i + 1}'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(item.question),
+          ),
+          Center(
+            child: Checkbox(
+              value: item.isCheckedYes == true,
+              onChanged: (val) => controller.updateChecklist(
+                  controller.checklistItems.indexOf(item), true),
+            ),
+          ),
+          Center(
+            child: Checkbox(
+              value: item.isCheckedYes == false,
+              onChanged: (val) => controller.updateChecklist(
+                  controller.checklistItems.indexOf(item), false),
+            ),
+          ),
+        ]);
+      }));
+
+      return rows;
+    }
 
     return Scaffold(
       appBar: const AppBarCustom(),
@@ -169,7 +226,7 @@ class ChecklistPage extends StatelessWidget {
                     const SizedBox(
                       height: 42,
                       child: Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.center,
                         child: Text(
                           'Checklist Aktivitas Drilling',
                           style: TextStyle(
@@ -178,115 +235,55 @@ class ChecklistPage extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: Colors.grey.shade400),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Obx(() => Table(
-                                border: TableBorder.symmetric(
-                                  inside:
-                                      BorderSide(color: Colors.grey.shade300),
-                                  outside: BorderSide.none,
-                                ),
-                                defaultVerticalAlignment:
-                                    TableCellVerticalAlignment.middle,
-                                columnWidths: const {
-                                  0: FlexColumnWidth(1),
-                                  1: FlexColumnWidth(3),
-                                  2: FlexColumnWidth(1.25),
-                                  3: FlexColumnWidth(1.25),
-                                },
-                                children: [
-                                  // Header
-                                  const TableRow(
-                                    decoration:
-                                        BoxDecoration(color: Colors.white),
-                                    children: [
-                                      Center(
-                                          child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Text("No",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)))),
-                                      Padding(
+                      child: Obx(() => SingleChildScrollView(
+                            child: Table(
+                              border:
+                                  TableBorder.all(color: Colors.grey.shade300),
+                              columnWidths: const {
+                                0: FlexColumnWidth(1),
+                                1: FlexColumnWidth(3),
+                                2: FlexColumnWidth(1),
+                                3: FlexColumnWidth(1),
+                              },
+                              children: [
+                                const TableRow(children: [
+                                  Center(
+                                      child: Padding(
                                           padding: EdgeInsets.all(8),
-                                          child: Text("Item Pemeriksaan",
+                                          child: Text('No',
                                               style: TextStyle(
                                                   fontWeight:
-                                                      FontWeight.bold))),
-                                      Center(
-                                          child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Text("Ya",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)))),
-                                      Center(
-                                          child: Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: FittedBox(
-                                                child: Text("Tidak",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ))),
-                                    ],
-                                  ),
-                                  // Rows
-                                  for (int i = 0;
-                                      i < controller.checklistItems.length;
-                                      i++)
-                                    TableRow(
-                                      children: [
-                                        Center(
-                                            child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Text("${i + 1}"))),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(
-                                            controller
-                                                .checklistItems[i].question,
-                                            softWrap: true,
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Checkbox(
-                                            value: controller.checklistItems[i]
-                                                    .isCheckedYes ==
-                                                true,
-                                            onChanged: (val) => controller
-                                                .updateChecklist(i, true),
-                                          ),
-                                        ),
-                                        Center(
-                                          child: Checkbox(
-                                            value: controller.checklistItems[i]
-                                                    .isCheckedYes ==
-                                                false,
-                                            onChanged: (val) => controller
-                                                .updateChecklist(i, false),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              )),
-                        ),
-                      ),
-                    ),
+                                                      FontWeight.bold)))),
+                                  Padding(
+                                      padding: EdgeInsets.all(8),
+                                      child: Text('Item Pemeriksaan',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
+                                  Center(
+                                      child: Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text('Ya',
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight.bold)))),
+                                  Center(
+                                      child: Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Text('Tidak',
+                                              style: TextStyle(
+                                                  fontWeight:
+                                                      FontWeight.bold)))),
+                                ]),
+                                ...buildChecklistGroup(
+                                    ChecklistCategory.sebelum,
+                                    'A. Sebelum Drilling'),
+                                ...buildChecklistGroup(
+                                    ChecklistCategory.sesudah,
+                                    'B. Setelah Drilling'),
+                              ],
+                            ),
+                          )),
+                    )
                   ],
                 ),
               ),

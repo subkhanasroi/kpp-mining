@@ -9,6 +9,8 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
+enum ChecklistCategory { sebelum, sesudah }
+
 class ChecklistController extends GetxController {
   late Rx<DateModel> dateTimeData;
 
@@ -26,48 +28,61 @@ class ChecklistController extends GetxController {
 
     checklistItems = <ChecklistItemModel>[
       ChecklistItemModel(
-          question:
-              'Apakah kondisi dan kedalam lubang tembak sudah diperiksa?'),
+          question: 'Apakah kondisi dan kedalam lubang tembak sudah diperiksa?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah informasi peledakan dan bendera merah sudah dipasang pada jalan / akses menuju tambang?'),
+              'Apakah informasi peledakan dan bendera merah sudah dipasang pada jalan / akses menuju tambang?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah informasi akan adanya peledakan sudah diinformasikan ke semua karyawan minimal 1 jam sebelumnya?'),
+              'Apakah informasi akan adanya peledakan sudah diinformasikan ke semua karyawan minimal 1 jam sebelumnya?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah lokasi peledakan sudah diberitanda peringatan sehingga orang yang tidak berkepentingan dilarang memasuki lokasi peledakan?'),
+              'Apakah lokasi peledakan sudah diberitanda peringatan sehingga orang yang tidak berkepentingan dilarang memasuki lokasi peledakan?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah lokasi bor sudah diisolasi dengan memasang safety line dan rambu - rambu?'),
+              'Apakah lokasi bor sudah diisolasi dengan memasang safety line dan rambu - rambu?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah titik untuk penandaan lubang yang arus di bor sudah disiapkan?'),
+              'Apakah titik untuk penandaan lubang yang arus di bor sudah disiapkan?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah Perlengkapan (Tali segitiga geometri) sudah disiapkan?'),
+              'Apakah Perlengkapan (Tali segitiga geometri) sudah disiapkan?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah penandaan sudah berdasarkan geometri yang sesuai dengan W.O. dari Drill & Blast Engineer?'),
+              'Apakah penandaan sudah berdasarkan geometri yang sesuai dengan W.O. dari Drill & Blast Engineer?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
-          question: 'Apakah Operator Drill sudah melakukan P2H dengan benar?'),
-      ChecklistItemModel(
-          question:
-              'Apakah operator drill sudah diberikan pengarahan instruksi kerja yang jelas?'),
-      ChecklistItemModel(
-          question:
-              'Apakah selama proses pengeboran telah sesuai dengan instruksi kerja?'),
+          question: 'Apakah Operator Drill sudah melakukan P2H dengan benar?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah ada kelainan dari unit Drill selama pengoperasian?'),
+              'Apakah operator drill sudah diberikan pengarahan instruksi kerja yang jelas?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah Operator Drill sudah melaporkan produktivitasnya perjam ke OCR?'),
+              'Apakah selama proses pengeboran telah sesuai dengan instruksi kerja?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
-          question: 'Apakah lubang bor sudah sesuai dengan drill design?'),
+          question: 'Apakah ada kelainan dari unit Drill selama pengoperasian?',
+          category: ChecklistCategory.sebelum),
       ChecklistItemModel(
           question:
-              'Apakah ada lubang yang Collaps (buntu) dan telah diberi penandan?'),
+              'Apakah Operator Drill sudah melaporkan produktivitasnya perjam ke OCR?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah lubang bor sudah sesuai dengan drill design?',
+          category: ChecklistCategory.sesudah),
+      ChecklistItemModel(
+          question:
+              'Apakah ada lubang yang Collaps (buntu) dan telah diberi penandan?',
+          category: ChecklistCategory.sesudah),
     ].obs;
   }
 
@@ -90,10 +105,16 @@ class ChecklistController extends GetxController {
   }
 
   void addQuestion() async {
+    final category = await showCategoryDialog();
+    if (category == null) return;
+
     String? newQuestion = await Get.dialog<String>(AddQuestionDialog());
 
     if (newQuestion != null && newQuestion.isNotEmpty) {
-      checklistItems.add(ChecklistItemModel(question: newQuestion));
+      checklistItems.add(ChecklistItemModel(
+        question: newQuestion,
+        category: category,
+      ));
     }
   }
 
@@ -103,6 +124,27 @@ class ChecklistController extends GetxController {
       jam: '-',
       lokasi: '-',
       rl: '-',
+    );
+  }
+
+  Future<ChecklistCategory?> showCategoryDialog() async {
+    return await Get.dialog<ChecklistCategory>(
+      AlertDialog(
+        title: const Text('Pilih Kategori'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text('Sebelum Drilling'),
+              onTap: () => Get.back(result: ChecklistCategory.sebelum),
+            ),
+            ListTile(
+              title: const Text('Setelah Drilling'),
+              onTap: () => Get.back(result: ChecklistCategory.sesudah),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -188,20 +230,13 @@ class ChecklistController extends GetxController {
                       _tableHeader('Keterangan'),
                     ],
                   ),
-                  ...List.generate(checklistItems.length, (i) {
-                    final item = checklistItems[i];
-                    return pw.TableRow(
-                      children: [
-                        _cellCenter('${i + 1}'),
-                        _cellLeft(item.question),
-                        _checkboxCell(item.isCheckedYes == true, customFont),
-                        _checkboxCell(item.isCheckedYes == false, customFont),
-                        _cellLeft(''),
-                      ],
-                    );
-                  }),
+                  _pdfCategoryRow('A. Sebelum Drilling'),
+                  ..._pdfChecklistItems(ChecklistCategory.sebelum, customFont),
+                  _pdfCategoryRow('B. Setelah Drilling'),
+                  ..._pdfChecklistItems(ChecklistCategory.sesudah, customFont),
                 ],
               ),
+
               pw.Table(border: pw.TableBorder.all(width: 0.5), columnWidths: {
                 0: const pw.FlexColumnWidth(1)
               }, children: [
@@ -261,6 +296,36 @@ class ChecklistController extends GetxController {
       onLayout: (format) async => pdf.save(),
     );
   }
+
+  List<pw.TableRow> _pdfChecklistItems(
+      ChecklistCategory category, pw.Font font) {
+    final items = checklistItems.where((e) => e.category == category).toList();
+    return List.generate(items.length, (i) {
+      final item = items[i];
+      return pw.TableRow(children: [
+        _cellCenter('${i + 1}'),
+        _cellLeft(item.question),
+        _checkboxCell(item.isCheckedYes == true, font),
+        _checkboxCell(item.isCheckedYes == false, font),
+        _cellLeft(''),
+      ]);
+    });
+  }
+
+  pw.TableRow _pdfCategoryRow(String label) => pw.TableRow(
+        children: [
+          pw.SizedBox(),
+          pw.Padding(
+            padding: const pw.EdgeInsets.all(4),
+            child: pw.Text(label,
+                style:
+                    pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8)),
+          ),
+          pw.SizedBox(),
+          pw.SizedBox(),
+          pw.SizedBox(),
+        ],
+      );
 
   pw.Widget _tableHeader(String text) {
     return pw.Container(
