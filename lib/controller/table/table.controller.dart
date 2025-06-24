@@ -20,7 +20,7 @@ class TableController extends GetxController {
   final holeCount = 0.obs;
   final volume = 0.0.obs;
 
-  late RxList<RxList<String>> cellValues;
+  late RxList<RxList<RxMap<String, dynamic>>> cellValues;
   late Rx<InspectionFormModel> dataTanggal;
 
   @override
@@ -49,7 +49,10 @@ class TableController extends GetxController {
   void initTable(int rows, int cols) {
     cellValues = List.generate(
       rows,
-      (_) => List.generate(cols, (_) => '-').obs,
+      (_) => List.generate(
+        cols,
+        (_) => {'depth': '-', 'isWet': false}.obs,
+      ).obs,
     ).obs;
   }
 
@@ -82,7 +85,12 @@ class TableController extends GetxController {
     );
 
     if (result != null) {
-      cellValues[row - 1][col] = result;
+      final depthValue = result['depth'] ?? '-';
+      final isWet = result['isWetHole'] ?? false;
+
+      cellValues[row - 1][col]['depth'] = depthValue;
+      cellValues[row - 1][col]['isWet'] = isWet;
+
       calculateSummary();
     }
   }
@@ -110,7 +118,8 @@ class TableController extends GetxController {
     double total = 0.0;
 
     for (var row in cellValues) {
-      for (var val in row) {
+      for (var cell in row) {
+        final val = cell['depth'];
         if (val != '-') {
           final parsed = double.tryParse(val);
           if (parsed != null) {
@@ -120,6 +129,11 @@ class TableController extends GetxController {
         }
       }
     }
+
+    totalDepth.value = total;
+    holeCount.value = count;
+    avgDepth.value = count > 0 ? total / count : 0;
+    volume.value = count > 0 ? patternArea * avgDepth.value * count : 0;
 
     totalDepth.value = total;
     holeCount.value = count;
@@ -265,12 +279,14 @@ class TableController extends GetxController {
               children: [
                 if (row % 2 == 0) pw.SizedBox(width: 10),
                 ...List.generate(cols, (col) {
-                  final val = cellValues[row][col];
+                  final val = cellValues[row][col]['depth'];
+                  final isWet = cellValues[row][col]['isWet'] ?? false;
                   return pw.Container(
                     width: 26,
                     height: 24,
                     alignment: pw.Alignment.center,
                     decoration: pw.BoxDecoration(
+                      color: isWet ? PdfColors.grey300 : PdfColors.white,
                       border: pw.Border.all(width: 0.3),
                     ),
                     child:
@@ -335,7 +351,12 @@ class TableController extends GetxController {
           _formRow('Dry', dry, font: customFont),
           _formRow('Collapse', collapse, font: customFont),
           _formRow('Average Depth (m)', avgDepth),
-          _formRow('Volume', volume),
+          buildCalculate(
+            totalHole: totalHole,
+            volume: volume,
+            depthAverage: avgDepth,
+            depth: totalDepth.toString(),
+          ),
 
           // CATATAN (di atas tanda tangan)
           pw.Container(
@@ -513,6 +534,50 @@ class TableController extends GetxController {
                     position: pw.Alignment.bottomCenter),
                 _lokasiValueCell('$totalHoleV\n\n$totalHole',
                     position: pw.Alignment.bottomCenter),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget buildCalculate({
+    String totalHole = '',
+    String depth = '',
+    String depthAverage = '',
+    String volume = '',
+  }) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+      children: [
+        // Tabel atas: Diameter | Burden | Spacing
+        pw.Table(
+          border: pw.TableBorder.all(width: 0.4),
+          columnWidths: const {
+            0: pw.FlexColumnWidth(1.2),
+            1: pw.FlexColumnWidth(1.2),
+            2: pw.FlexColumnWidth(1.2),
+            3: pw.FlexColumnWidth(1.2),
+          },
+          children: [
+            // Baris label
+            pw.TableRow(
+              children: [
+                _lokasiHeaderCell('Jumlah Lubang digunakan'),
+                _lokasiHeaderCell('Total Jumlah Kedalaman'),
+                _lokasiHeaderCell('Kedalaman Rata-rata'),
+                _lokasiHeaderCell('Volume'),
+              ],
+            ),
+            // Baris nilai
+            pw.TableRow(
+              children: [
+                _lokasiValueCell(totalHole, position: pw.Alignment.center),
+                _lokasiValueCell(depth, position: pw.Alignment.center),
+                _lokasiValueCell(depthAverage, position: pw.Alignment.center),
+                _lokasiValueCell(volume, position: pw.Alignment.center),
               ],
             ),
           ],

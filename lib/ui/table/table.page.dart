@@ -468,13 +468,17 @@ class TablePage extends StatelessWidget {
                     if (row % 2 == 0) const SizedBox(width: 25),
                     ...List.generate(colCount, (col) {
                       return Obx(() {
-                        final value = controller.cellValues[row - 1][col];
+                        final cell = controller.cellValues[row - 1][col];
+                        final value = cell['depth'];
+                        final isWet = cell['isWet'] ?? false;
                         return GestureDetector(
                           onTap: () => controller.openDialog(row, col),
                           child: Container(
                             width: 50,
                             height: 40,
                             decoration: BoxDecoration(
+                              color:
+                                  isWet ? Colors.grey.shade300 : Colors.white,
                               border: Border.all(color: Colors.grey),
                             ),
                             alignment: Alignment.center,

@@ -14,6 +14,7 @@ class DepthDialog extends StatefulWidget {
 
 class _DepthDialogState extends State<DepthDialog> {
   final TextEditingController _depthController = TextEditingController();
+  bool isWetHole = false;
 
   @override
   void dispose() {
@@ -44,13 +45,30 @@ class _DepthDialogState extends State<DepthDialog> {
               border: OutlineInputBorder(),
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Lubang Basah:"),
+              Checkbox(
+                value: isWetHole,
+                onChanged: (value) {
+                  setState(() {
+                    isWetHole = value ?? false;
+                  });
+                },
+              ),
+            ],
+          ),
         ],
       ),
       actions: [
         ElevatedButton(
           onPressed: () {
             final newValue = _depthController.text;
-            Get.back(result: newValue);
+            Get.back(result: {
+              'depth': newValue,
+              'isWetHole': isWetHole,
+            });
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -64,7 +82,10 @@ class _DepthDialogState extends State<DepthDialog> {
           ),
         ),
         ElevatedButton(
-          onPressed: () => Get.back(result: ''),
+          onPressed: () => Get.back(result: {
+            'depth': '-',
+            'isWetHole': false,
+          }),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             shape: RoundedRectangleBorder(
