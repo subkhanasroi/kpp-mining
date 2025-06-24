@@ -17,7 +17,8 @@ class CalculatorController extends GetxController {
     inputDepth = TextEditingController(text: 0.toString());
     resultPf = TextEditingController(text: 0.toString());
     resultT = TextEditingController(text: 0.toString());
-    listPattern = RxList<String>(['8x7', '8x8', '8x9']);
+    listPattern =
+        RxList<String>(['6x7', "7.5x8.5", "7x8", "8x8", "8x9", "9x10"]);
     listPF = RxList<String>([]);
     generatePfList();
   }

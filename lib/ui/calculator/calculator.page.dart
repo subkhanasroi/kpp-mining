@@ -20,67 +20,69 @@ class CalculatorPage extends StatelessWidget {
         child: GetBuilder<CalculatorController>(
           init: CalculatorController(),
           builder: (_) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Obx(() {
-                  return _buildDropdown(
-                      title: 'Pattern',
-                      hint: 'Select Pattern',
-                      items: controller.listPattern,
-                      selected: controller.selectedPattern,
-                      onChanged: controller.setPattern);
-                }),
-                Obx(() {
-                  return _buildDropdown(
-                    title: 'PF',
-                    hint: 'Select PF',
-                    items: controller.listPF,
-                    selected: controller.selectedPF,
-                    onChanged: controller.setPF,
-                  );
-                }),
-                _buildTextField(
-                  title: 'DEPTH (m)',
-                  hint: 'Input Depth',
-                  controller: controller.inputDepth,
-                ),
-                IgnorePointer(
-                  child: _buildTextField(
-                    title: 'PF Hasil',
-                    hint: 'Result PF',
-                    controller: controller.resultPf,
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Obx(() {
+                    return _buildDropdown(
+                        title: 'Pattern',
+                        hint: 'Select Pattern',
+                        items: controller.listPattern,
+                        selected: controller.selectedPattern,
+                        onChanged: controller.setPattern);
+                  }),
+                  Obx(() {
+                    return _buildDropdown(
+                      title: 'PF',
+                      hint: 'Select PF',
+                      items: controller.listPF,
+                      selected: controller.selectedPF,
+                      onChanged: controller.setPF,
+                    );
+                  }),
+                  _buildTextField(
+                    title: 'DEPTH (m)',
+                    hint: 'Input Depth',
+                    controller: controller.inputDepth,
                   ),
-                ),
-                IgnorePointer(
-                  child: _buildTextField(
-                    title: 'T Hasil',
-                    hint: 'Result T',
-                    controller: controller.resultT,
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: controller.hitungHasil,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Hasil',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  IgnorePointer(
+                    child: _buildTextField(
+                      title: 'PF Hasil',
+                      hint: 'Result PF',
+                      controller: controller.resultPf,
                     ),
                   ),
-                ),
-              ],
+                  IgnorePointer(
+                    child: _buildTextField(
+                      title: 'T Hasil',
+                      hint: 'Result T',
+                      controller: controller.resultT,
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: controller.hitungHasil,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Hasil',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
