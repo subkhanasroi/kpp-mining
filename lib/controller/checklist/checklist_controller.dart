@@ -14,7 +14,9 @@ enum ChecklistCategory { sebelum, sesudah }
 class ChecklistController extends GetxController {
   late Rx<DateModel> dateTimeData;
 
-  late RxList<ChecklistItemModel> checklistItems;
+  late RxList<ChecklistItemModel> checklistItemsDrilling;
+  late RxList<ChecklistItemModel> checklistItemsBlasting;
+  final isDrillingMode = true.obs;
 
   @override
   void onInit() {
@@ -26,7 +28,7 @@ class ChecklistController extends GetxController {
       rl: '-',
     ).obs;
 
-    checklistItems = <ChecklistItemModel>[
+    checklistItemsDrilling = <ChecklistItemModel>[
       ChecklistItemModel(
           question: 'Apakah kondisi dan kedalam lubang tembak sudah diperiksa?',
           category: ChecklistCategory.sebelum),
@@ -84,6 +86,76 @@ class ChecklistController extends GetxController {
               'Apakah ada lubang yang Collaps (buntu) dan telah diberi penandan?',
           category: ChecklistCategory.sesudah),
     ].obs;
+
+    checklistItemsBlasting = <ChecklistItemModel>[
+      ChecklistItemModel(
+          question:
+              'Apakah kondisi dan kedalaman lubang tembak sudah diperiksa?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah informasi peledakan dan bendera merah sudah dipasang pada jalan / akses menuju tambang?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah informasi akan adanya peledakan sudah diinformasikan ke semua karyawan minimal 1 jam sebelumnya?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah lokasi peledakan sudah diberi tanda peringatan sehingga orang yang tidak berkepentingan dilarang memasuki lokasi peledakan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah Mobile Mixing Unit untuk membuat ANFO telah diperiksa dan dicoba?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah persediaan solar mencukupi?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah peralatan lengkap dan dalam kondisi baik dipakai di lokasi peledakan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah lubang tembak sudah diisi semua dengan bahan peledak sesuai dengan perencanaan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah semua lubang tembak sudah dirangkai dengan benar berdasarkan desain rangkaian (pattern)?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah sirine tanda evakuasi sudah dibunyikan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah semua alat berat sudah dipindah dan sudah menuju tempat yang aman?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah semua pengawas peledakan sudah dikondisikan dan dijaga oleh pengawas peledakan di lokasi?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah semua pengawas peledakan pada chanel radio khusus untuk kebutuhan peledakan, dan mudah dihubungi?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question:
+              'Apakah lokasi peledakan sudah dicek ulang dan dipastikan bahwa sudah tidak ada alat atau unit & manusia yang masih berada di lokasi peledakan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah pengecekan ke setiap bloker telah dilakukan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah sirine tanda peledakan sudah dibunyikan?',
+          category: ChecklistCategory.sebelum),
+      ChecklistItemModel(
+          question: 'Apakah dari hasil blasting aman dari misfire?',
+          category: ChecklistCategory.sesudah),
+      ChecklistItemModel(
+          question:
+              'Apakah sirine tanda selesai aktivitas blasting sudah dibunyikan?',
+          category: ChecklistCategory.sesudah),
+    ].obs;
   }
 
   void editTanggal() async {
@@ -100,8 +172,13 @@ class ChecklistController extends GetxController {
   }
 
   void updateChecklist(int index, bool isYes) {
-    checklistItems[index].isCheckedYes = isYes;
-    checklistItems.refresh();
+    if (isDrillingMode.value) {
+      checklistItemsDrilling[index].isCheckedYes = isYes;
+      checklistItemsDrilling.refresh();
+    } else {
+      checklistItemsBlasting[index].isCheckedYes = isYes;
+      checklistItemsBlasting.refresh();
+    }
   }
 
   void addQuestion() async {
@@ -111,10 +188,16 @@ class ChecklistController extends GetxController {
     String? newQuestion = await Get.dialog<String>(AddQuestionDialog());
 
     if (newQuestion != null && newQuestion.isNotEmpty) {
-      checklistItems.add(ChecklistItemModel(
+      final newItem = ChecklistItemModel(
         question: newQuestion,
         category: category,
-      ));
+      );
+
+      if (isDrillingMode.value) {
+        checklistItemsDrilling.add(newItem);
+      } else {
+        checklistItemsBlasting.add(newItem);
+      }
     }
   }
 
@@ -195,7 +278,7 @@ class ChecklistController extends GetxController {
                   pw.Align(
                     alignment: pw.Alignment.bottomCenter,
                     child: pw.Text(
-                      '\nCHECKLIST AKTIVITAS DRILLING',
+                      '\nCHECKLIST AKTIVITAS  ${isDrillingMode.value ? "DRILLING" : "BLASTING"}',
                       textAlign: pw.TextAlign.center,
                       style: pw.TextStyle(
                           fontSize: 12, fontWeight: pw.FontWeight.bold),
@@ -230,9 +313,11 @@ class ChecklistController extends GetxController {
                       _tableHeader('Keterangan'),
                     ],
                   ),
-                  _pdfCategoryRow('A. Sebelum Drilling'),
+                  _pdfCategoryRow(
+                      'A. Sebelum  ${isDrillingMode.value ? "Drilling" : "Blasting"}'),
                   ..._pdfChecklistItems(ChecklistCategory.sebelum, customFont),
-                  _pdfCategoryRow('B. Setelah Drilling'),
+                  _pdfCategoryRow(
+                      'B. Setelah  ${isDrillingMode.value ? "Drilling" : "Blasting"}'),
                   ..._pdfChecklistItems(ChecklistCategory.sesudah, customFont),
                 ],
               ),
@@ -299,7 +384,10 @@ class ChecklistController extends GetxController {
 
   List<pw.TableRow> _pdfChecklistItems(
       ChecklistCategory category, pw.Font font) {
-    final items = checklistItems.where((e) => e.category == category).toList();
+    final items =
+        (isDrillingMode.value ? checklistItemsDrilling : checklistItemsBlasting)
+            .where((e) => e.category == category)
+            .toList();
     return List.generate(items.length, (i) {
       final item = items[i];
       return pw.TableRow(children: [

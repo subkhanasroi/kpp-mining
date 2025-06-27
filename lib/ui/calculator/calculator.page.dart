@@ -10,81 +10,121 @@ class CalculatorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(CalculatorController());
 
-    return Scaffold(
-      appBar: const AppBarCustom(),
-      body: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16), color: Colors.white),
-        padding: const EdgeInsets.all(16.0),
-        margin: const EdgeInsets.all(16.0),
-        child: GetBuilder<CalculatorController>(
-          init: CalculatorController(),
-          builder: (_) {
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Obx(() {
-                    return _buildDropdown(
-                        title: 'Pattern',
-                        hint: 'Select Pattern',
-                        items: controller.listPattern,
-                        selected: controller.selectedPattern,
-                        onChanged: controller.setPattern);
-                  }),
-                  Obx(() {
-                    return _buildDropdown(
-                      title: 'PF',
-                      hint: 'Select PF',
-                      items: controller.listPF,
-                      selected: controller.selectedPF,
-                      onChanged: controller.setPF,
-                    );
-                  }),
-                  _buildTextField(
-                    title: 'DEPTH (m)',
-                    hint: 'Input Depth',
-                    controller: controller.inputDepth,
-                  ),
-                  IgnorePointer(
-                    child: _buildTextField(
-                      title: 'PF Hasil',
-                      hint: 'Result PF',
-                      controller: controller.resultPf,
-                    ),
-                  ),
-                  IgnorePointer(
-                    child: _buildTextField(
-                      title: 'T Hasil',
-                      hint: 'Result T',
-                      controller: controller.resultT,
-                    ),
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: controller.hitungHasil,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Hasil',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        final shouldExit = await Get.dialog<bool>(
+          AlertDialog(
+            title: const Text('Konfirmasi'),
+            content:
+                const Text('Apakah Anda yakin ingin keluar dari menu ini?'),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: const Text(
+                  'Batal',
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
-            );
-          },
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: () => Get.back(result: true),
+                child: const Text(
+                  'Ya, Keluar',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldExit == true) {
+          Get.back();
+        }
+      },
+      child: Scaffold(
+        appBar: const AppBarCustom(),
+        body: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16), color: Colors.white),
+          padding: const EdgeInsets.all(16.0),
+          margin: const EdgeInsets.all(16.0),
+          child: GetBuilder<CalculatorController>(
+            init: CalculatorController(),
+            builder: (_) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Obx(() {
+                      return _buildDropdown(
+                          title: 'Pattern',
+                          hint: 'Select Pattern',
+                          items: controller.listPattern,
+                          selected: controller.selectedPattern,
+                          onChanged: controller.setPattern);
+                    }),
+                    Obx(() {
+                      return _buildDropdown(
+                        title: 'PF',
+                        hint: 'Select PF',
+                        items: controller.listPF,
+                        selected: controller.selectedPF,
+                        onChanged: controller.setPF,
+                      );
+                    }),
+                    _buildTextField(
+                      title: 'DEPTH (m)',
+                      hint: 'Input Depth',
+                      controller: controller.inputDepth,
+                    ),
+                    IgnorePointer(
+                      child: _buildTextField(
+                        title: 'PF Hasil',
+                        hint: 'Result PF',
+                        controller: controller.resultPf,
+                      ),
+                    ),
+                    IgnorePointer(
+                      child: _buildTextField(
+                        title: 'T Hasil',
+                        hint: 'Result T',
+                        controller: controller.resultT,
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: controller.hitungHasil,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Hasil',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
