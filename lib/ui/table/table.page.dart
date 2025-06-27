@@ -525,8 +525,7 @@ class TablePage extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Text('Jumlah Lubang digunakan',
-                      textAlign: TextAlign.center),
+                  child: Text('Jumlah Lubang', textAlign: TextAlign.center),
                 ),
                 Padding(
                   padding: EdgeInsets.all(8.0),

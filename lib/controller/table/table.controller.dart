@@ -564,7 +564,7 @@ class TableController extends GetxController {
             // Baris label
             pw.TableRow(
               children: [
-                _lokasiHeaderCell('Jumlah Lubang digunakan'),
+                _lokasiHeaderCell('Jumlah Lubang'),
                 _lokasiHeaderCell('Total Jumlah Kedalaman'),
                 _lokasiHeaderCell('Kedalaman Rata-rata'),
                 _lokasiHeaderCell('Volume'),
