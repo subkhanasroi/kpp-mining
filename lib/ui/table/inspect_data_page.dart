@@ -83,8 +83,6 @@ class InspectionForPage extends StatelessWidget {
                 child: Column(
                   children: [
                     _buildDateTime('C/N Unit', data.cnUnit),
-                    _buildDateTime(
-                        'Total Hole', data.totalHoleStatus?.toString()),
                     _buildDateTime('Wet', data.wet.toString()),
                     _buildDateTime('Dry', data.dry.toString()),
                     _buildDateTime('Collap', data.collapse.toString()),

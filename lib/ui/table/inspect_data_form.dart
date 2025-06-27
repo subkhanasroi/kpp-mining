@@ -27,7 +27,6 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
   final totalHoleC = TextEditingController();
   final averageDepthC = TextEditingController();
   final cnUnitC = TextEditingController();
-  final totalHoleStatusC = TextEditingController();
   final noteC = TextEditingController();
 
   final wet = TextEditingController();
@@ -49,7 +48,6 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
     totalHoleC.text = d?.totalHole?.toString() ?? '';
     averageDepthC.text = d?.averageDepth?.toString() ?? '';
     cnUnitC.text = d?.cnUnit ?? '';
-    totalHoleStatusC.text = d?.totalHoleStatus?.toString() ?? '';
     noteC.text = d?.note ?? '';
     wet.text = d?.wet ?? '';
     dry.text = d?.dry ?? '';
@@ -69,7 +67,6 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
     totalHoleC.dispose();
     averageDepthC.dispose();
     cnUnitC.dispose();
-    totalHoleStatusC.dispose();
     noteC.dispose();
     wet.dispose();
     dry.dispose();
@@ -90,7 +87,6 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
         totalHole: int.tryParse(totalHoleC.text),
         averageDepth: double.tryParse(averageDepthC.text),
         cnUnit: cnUnitC.text,
-        totalHoleStatus: int.tryParse(totalHoleStatusC.text),
         wet: wet.text,
         dry: dry.text,
         collapse: collapse.text,
@@ -148,8 +144,6 @@ class _InspectionFormPageState extends State<InspectionFormPage> {
             _buildField('Average Depth (m)', averageDepthC,
                 keyboardType: TextInputType.number),
             _buildField('C/N Unit', cnUnitC),
-            _buildField('Total Hole Status', totalHoleStatusC,
-                keyboardType: TextInputType.number),
             _buildField('Wet', wet, keyboardType: TextInputType.number),
             _buildField('Dry', dry, keyboardType: TextInputType.number),
             _buildField('Collapse', collapse,

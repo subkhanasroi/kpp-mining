@@ -9,7 +9,6 @@ class InspectionFormModel {
   final int? totalHole;
   final double? averageDepth;
   final String cnUnit;
-  final int? totalHoleStatus;
   final String? wet;
   final String? dry;
   final String? collapse;
@@ -26,7 +25,6 @@ class InspectionFormModel {
     this.totalHole,
     this.averageDepth,
     required this.cnUnit,
-    this.totalHoleStatus,
     this.wet,
     this.dry,
     this.collapse,

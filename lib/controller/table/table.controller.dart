@@ -37,7 +37,6 @@ class TableController extends GetxController {
       totalHole: null,
       averageDepth: null,
       cnUnit: '',
-      totalHoleStatus: null,
       wet: null,
       dry: null,
       collapse: null,
